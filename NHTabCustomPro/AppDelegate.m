@@ -61,8 +61,6 @@
                               @"iconfont",kTabBarItemFontName,nil];
     
     _tabBarController = [[NHTabBarController alloc] initWithTabBarHeight:NHTabBarHeight];
-    _tabBarController.backgroundImageName = @"sl_tabbar_bg";
-    _tabBarController.iconGlossyIsHidden = YES;
     _tabBarController.delegate = self;
     _tabBarController.viewControllers = [[NSMutableArray alloc] initWithObjects:msgNavi,mallNavi,caifuNavi,meNavi, nil];
     _tabBarController.tabItemsInfo = [[NSArray alloc] initWithObjects:msgInfo,mallInfo,caifuInfo,meInfo, nil];
