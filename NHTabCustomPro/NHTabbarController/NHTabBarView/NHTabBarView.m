@@ -124,7 +124,8 @@ static int kTopEdgeWidth   = 1;
 - (void)drawRect:(CGRect)rect {
     // Drawing the tab bar background
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    UIColor *bgColor = [UIColor whiteColor];
+//    UIColor *bgColor = [UIColor whiteColor];
+    UIColor *bgColor = UIColorFromRGB(NHTabBarBgHexValue);
     CGContextSetFillColorWithColor(ctx, bgColor.CGColor);
     CGContextFillRect(ctx, rect);
     
@@ -149,7 +150,7 @@ static int kTopEdgeWidth   = 1;
      CGContextRestoreGState(ctx);
      //*/
     
-    //*最上部线浮雕
+   //*最上部线浮雕
     // Drawing the top dark emboss
     CGContextSaveGState(ctx);
     {

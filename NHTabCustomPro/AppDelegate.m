@@ -40,18 +40,32 @@
     UIViewController *mallController = [[UIViewController alloc] init];
     UINavigationController *mallNavi = [[UINavigationController alloc] initWithRootViewController:mallController];
     NSDictionary *mallInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                              @"商城",kTabBarItemTitleInfo,
+                              @"投资",kTabBarItemTitleInfo,
                               @"\U000f0005",kTabBarItemIconInfo,
                               @"iconfont",kTabBarItemFontName,nil];
     //linLi.view.backgroundColor = [UIColor blueColor];
     //linLiNavi.canDragBack = NO;
     
+    UIViewController *caifuController = [[UIViewController alloc] init];
+    UINavigationController *caifuNavi = [[UINavigationController alloc] initWithRootViewController:caifuController];
+    NSDictionary *caifuInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              @"财富",kTabBarItemTitleInfo,
+                              @"\U000f0005",kTabBarItemIconInfo,
+                              @"iconfont",kTabBarItemFontName,nil];
+    
+    UIViewController *meController = [[UIViewController alloc] init];
+    UINavigationController *meNavi = [[UINavigationController alloc] initWithRootViewController:meController];
+    NSDictionary *meInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              @"我",kTabBarItemTitleInfo,
+                              @"\U000f0005",kTabBarItemIconInfo,
+                              @"iconfont",kTabBarItemFontName,nil];
+    
     _tabBarController = [[NHTabBarController alloc] initWithTabBarHeight:NHTabBarHeight];
     _tabBarController.backgroundImageName = @"sl_tabbar_bg";
     _tabBarController.iconGlossyIsHidden = YES;
     _tabBarController.delegate = self;
-    _tabBarController.viewControllers = [[NSMutableArray alloc] initWithObjects:msgNavi,mallNavi, nil];
-    _tabBarController.tabItemsInfo = [[NSArray alloc] initWithObjects:msgInfo,mallInfo, nil];
+    _tabBarController.viewControllers = [[NSMutableArray alloc] initWithObjects:msgNavi,mallNavi,caifuNavi,meNavi, nil];
+    _tabBarController.tabItemsInfo = [[NSArray alloc] initWithObjects:msgInfo,mallInfo,caifuInfo,meInfo, nil];
     self.window.rootViewController = _tabBarController;
 //    self.window.rootViewController = naviRoot;
     [self.window makeKeyAndVisible];
@@ -60,8 +74,14 @@
 }
 
 - (void)tabBarController:(NHTabBarController *)tabbar didSelectViewController:(UIViewController *)viewController {
-    if (tabbar.selectedIndex == 1) {
-        [tabbar.tabBar setBadgeValue:19 withIndex:1];
+    if (tabbar.selectedIndex == 0) {
+        [tabbar.tabBar setBadgeValue:24 withIndex:0];
+    }else if (tabbar.selectedIndex == 1) {
+        [tabbar.tabBar setBadgeValue:0 withIndex:1];
+    }else if (tabbar.selectedIndex == 2) {
+        [tabbar.tabBar setBadgeValue:126 withIndex:2];
+    }else if (tabbar.selectedIndex == 3) {
+        [tabbar.tabBar setBadgeValue:-20 withIndex:3];
     }
 }
 
