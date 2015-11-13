@@ -15,7 +15,8 @@ static const float kPushAnimationDuration = 0.35;
 
 typedef NS_ENUM(NSUInteger, NHTabBarShowHideDirection) {
     NHTabBarShowHideDirectionLeft = 0,
-    NHTabBarShowHideDirectionRight = 1
+    NHTabBarShowHideDirectionRight = 1,
+    NHTabBarShowHideDirectionDown = 2
 };
 
 NSString *const kTabItemInfoTitleKey = @"kTabItemInfoTitleKey";
@@ -250,7 +251,8 @@ NSString *const kTabBarItemTitleInfo = @"kTabBarItemTitleInfo";
     tabBarView.contentView.frame = tmpTabBarView;
     
     [UIView animateWithDuration:((animated) ? kPushAnimationDuration : 0) animations:^{
-        _tabBar.transform = CGAffineTransformMakeTranslation(CGRectGetWidth(self.view.bounds) * directionVector, 0);
+//        _tabBar.transform = CGAffineTransformMakeTranslation(CGRectGetWidth(self.view.bounds) * directionVector, 0);
+        _tabBar.transform = CGAffineTransformMakeTranslation(0, CGRectGetWidth(self.view.bounds) * directionVector);
     } completion:^(BOOL finished) {
         _tabBar.hidden = YES;
         _tabBar.transform = CGAffineTransformIdentity;
@@ -317,7 +319,7 @@ NSString *const kTabBarItemTitleInfo = @"kTabBarItemTitleInfo";
 
 #pragma mark - Required Protocol Method
 
--(void)tabBar:(NHTabBarView *)FLTabbarView DidSelectTabAtIndex:(NSInteger)index {
+-(void)tabBar:(NHTabBarView *)NHTabbarView DidSelectTabAtIndex:(NSInteger)index {
     UIViewController *vc = (self.viewControllers)[index];
     
     if (self.selectedViewController == vc){
