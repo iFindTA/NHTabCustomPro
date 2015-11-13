@@ -143,25 +143,63 @@ NSString *const kTabBarItemTitleInfo = @"kTabBarItemTitleInfo";
     else
         pushed = NO;
     
-    // Logic to know when to show or hide the tab bar
-    BOOL isPreviousHidden, isNextHidden;
+    if (pushed) {
+        // Logic to know when to show or hide the tab bar
+        BOOL isPreviousHidden, isNextHidden;
+        
+        isPreviousHidden = [[prevViewControllers lastObject] hidesBottomBarWhenPushed];
+        isNextHidden = [viewController hidesBottomBarWhenPushed];
+        
+        prevViewControllers = [navigationController viewControllers];
+        
+        if (!isPreviousHidden && !isNextHidden)
+            return;
+        
+        else if (!isPreviousHidden && isNextHidden)
+            [self hideTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
+        
+        else if (isPreviousHidden && !isNextHidden)
+            [self showTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
+        
+        else if (isPreviousHidden && isNextHidden)
+            return;
+    }
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (!prevViewControllers)
+        prevViewControllers = [navigationController viewControllers];
     
-    isPreviousHidden = [[prevViewControllers lastObject] hidesBottomBarWhenPushed];
-    isNextHidden = [viewController hidesBottomBarWhenPushed];
     
-    prevViewControllers = [navigationController viewControllers];
+    // We detect is the view as been push or popped
+    BOOL pushed;
     
-    if (!isPreviousHidden && !isNextHidden)
-        return;
+    if ([prevViewControllers count] <= [[navigationController viewControllers] count])
+        pushed = YES;
+    else
+        pushed = NO;
     
-    else if (!isPreviousHidden && isNextHidden)
-        [self hideTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
-    
-    else if (isPreviousHidden && !isNextHidden)
-        [self showTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
-    
-    else if (isPreviousHidden && isNextHidden)
-        return;
+    if (!pushed) {
+        // Logic to know when to show or hide the tab bar
+        BOOL isPreviousHidden, isNextHidden;
+        
+        isPreviousHidden = [[prevViewControllers lastObject] hidesBottomBarWhenPushed];
+        isNextHidden = [viewController hidesBottomBarWhenPushed];
+        
+        prevViewControllers = [navigationController viewControllers];
+        
+        if (!isPreviousHidden && !isNextHidden)
+            return;
+        
+        else if (!isPreviousHidden && isNextHidden)
+            [self hideTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
+        
+        else if (isPreviousHidden && !isNextHidden)
+            [self showTabBar:(pushed ? NHTabBarShowHideDirectionRight : NHTabBarShowHideDirectionLeft) animated:animated];
+        
+        else if (isPreviousHidden && isNextHidden)
+            return;
+    }
 }
 
 - (void)showTabBar:(NHTabBarShowHideDirection )showHideFrom animated:(BOOL)animated {
