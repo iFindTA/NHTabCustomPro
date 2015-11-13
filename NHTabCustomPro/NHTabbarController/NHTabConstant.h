@@ -21,8 +21,6 @@ static const float kMargin = 2.0;
 // Margin at the top
 static const float kTopMargin = 2.0;
 
-#define NHTabBarIconFontSize     30
-#define NHTabBarTitleFontSize    11
 #define NHTabBarHeight           50
 
 #define UIColorFromRGB(rgbValue) \

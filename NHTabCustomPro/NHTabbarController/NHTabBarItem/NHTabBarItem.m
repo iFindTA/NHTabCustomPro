@@ -79,6 +79,9 @@
     }
 }
 
+#define NHTabBarIconFontSize     30
+#define NHTabBarTitleFontSize    11
+
 #pragma mark - Drawing
 - (void)drawRect:(CGRect)rect {
     
@@ -88,7 +91,6 @@
     container.origin.y += kTopMargin;
     
     CGRect imageRect = CGRectZero;
-    CGFloat ratio = 1;
 //    BOOL isSelect = _isSelect;
     BOOL isSelect = self.selected;
     UIColor *bgColor = UIColorFromRGB(NHTabBarBgHexValue);
@@ -103,45 +105,20 @@
     
     NSDictionary *iconAttrs = [NSDictionary dictionaryWithObjectsAndKeys:iconFont,NSFontAttributeName,isSelect?selectColor:normalColor,NSForegroundColorAttributeName, nil];
     CGSize iconSize = [_iconInfo sizeWithAttributes:iconAttrs];
-    imageRect.size = iconSize;
+    CGFloat max = MAX(ceilf(iconSize.width), ceilf(iconSize.height));
+    max = MIN(max, NHTabBarIconFontSize);
+    imageRect.size = CGSizeMake(max, max);
+    imageRect.origin = CGPointMake((rect.size.width-max)*0.5, container.origin.y);
     
     NSDictionary *titleAttrs = [NSDictionary dictionaryWithObjectsAndKeys:titleFont,NSFontAttributeName,isSelect?selectColor:normalColor,NSForegroundColorAttributeName, nil];
     CGSize titleSize = [_titleInfo sizeWithAttributes:titleAttrs];
-    
+    titleSize = CGSizeMake(ceilf(titleSize.width), ceilf(titleSize.height));
     // Container, basically centered in rect
     CGRect labelRect = CGRectZero;
-    
     labelRect.size = titleSize;
-    
-    // Container of the image + label (when there is room)
-    CGRect content = CGRectZero;
-    content.size.width = CGRectGetWidth(container);
-    
-    // We determine the height based on the longest side of the image (when not square) , presence of the label and height of the container
-    content.size.height = MIN(MAX(CGRectGetWidth(imageRect), CGRectGetHeight(imageRect)) + (kMargin + CGRectGetHeight(labelRect)) , CGRectGetHeight(container));
-    
-    // Now we move the boxes
-    content.origin.x = floorf(CGRectGetMidX(container) - CGRectGetWidth(content) / 2);
-    content.origin.y = floorf(CGRectGetMidY(container) - CGRectGetHeight(content) / 2);
-    
-    //    labelRect.size.width = CGRectGetWidth(content);
-    labelRect.origin.x = (rect.size.width-titleSize.width)*0.5;
-    labelRect.origin.y = CGRectGetMaxY(content) - CGRectGetHeight(labelRect);
-    
-    CGRect imageContainer = content;
-    imageContainer.size.height = CGRectGetHeight(content) - (kMargin + CGRectGetHeight(labelRect));
-    
-    // When the image is not square we have to make sure it will not go beyond the bonds of the container
-    if (CGRectGetWidth(imageRect) >= CGRectGetHeight(imageRect)) {
-        imageRect.size.width = MIN(CGRectGetHeight(imageRect), MIN(CGRectGetWidth(imageContainer), CGRectGetHeight(imageContainer)));
-        imageRect.size.height = floorf(CGRectGetWidth(imageRect) / ratio);
-    } else {
-        imageRect.size.height = MIN(CGRectGetHeight(imageRect), MIN(CGRectGetWidth(imageContainer), CGRectGetHeight(imageContainer)));
-        imageRect.size.width = floorf(CGRectGetHeight(imageRect) * ratio);
-    }
-    
-    imageRect.origin.x = floorf(CGRectGetMidX(content) - CGRectGetWidth(imageRect) / 2);
-    imageRect.origin.y = floorf(CGRectGetMidY(imageContainer) - CGRectGetHeight(imageRect) / 2);
+    CGFloat cur_y = imageRect.origin.y+imageRect.size.height;
+    cur_y += MAX(0, (container.size.height-imageRect.size.height-titleSize.height)*0.5);
+    labelRect.origin = CGPointMake((rect.size.width-titleSize.width)*0.5, cur_y);
     
     [_iconInfo drawInRect:imageRect withAttributes:iconAttrs];
     
